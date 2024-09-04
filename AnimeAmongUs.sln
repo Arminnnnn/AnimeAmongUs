@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDBApi", "MongoDBApi\MongoDBApi.csproj", "{08433D96-8772-417C-B06A-D9B5E1A24725}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp\WebApp.csproj", "{7DE1AC7D-2648-4F04-B63E-8283644A26F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp.Client", "WebApp\WebApp.Client\WebApp.Client.csproj", "{2D32EB7F-7E66-42D0-880E-3412E67C7F09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{08433D96-8772-417C-B06A-D9B5E1A24725}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08433D96-8772-417C-B06A-D9B5E1A24725}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08433D96-8772-417C-B06A-D9B5E1A24725}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE1AC7D-2648-4F04-B63E-8283644A26F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE1AC7D-2648-4F04-B63E-8283644A26F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE1AC7D-2648-4F04-B63E-8283644A26F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE1AC7D-2648-4F04-B63E-8283644A26F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D32EB7F-7E66-42D0-880E-3412E67C7F09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D32EB7F-7E66-42D0-880E-3412E67C7F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D32EB7F-7E66-42D0-880E-3412E67C7F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D32EB7F-7E66-42D0-880E-3412E67C7F09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

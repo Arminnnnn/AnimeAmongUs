@@ -1,0 +1,14 @@
+html, body {
+    background-color: #fc74ea;
+}
+
+@font-face {
+    font-family: 'AnimeFont';
+    src: url('Atop-R99O3.ttf');
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    color: white;
+    font-family: 'AnimeFont';
+    margin: 0px 0px 0px 0px;
+}

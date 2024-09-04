@@ -46,11 +46,11 @@ public class GameService
         }
     }
 
-    public async Task<Character?> GetImposterCharacter()
+    public async Task<Character> GetImposterCharacter()
     {
         if (_characters.Count == 0)
-        {
-            await this.GetCharactersThroughCharacterService();
+        { 
+            _characters = await _characterService.GetAllCharacterData();
         }
 
         var imposter = _characters.FirstOrDefault(c => c.Id == _imposterCharacterId);
@@ -63,30 +63,10 @@ public class GameService
         
         if (_characters.Count == 0)
         {
-            await this.GetCharactersThroughCharacterService();
+            _characters = await _characterService.GetAllCharacterData();
         }
         
         var innocentCharacter = _characters.Where(c => c.Id != _imposterCharacterId).ToList();
         return innocentCharacter[rnd.Next(_characters.Count-1)];
-    }
-
-    private async Task GetCharactersThroughCharacterService()
-    {
-        try
-        {
-            var charactersResult = await _characterService.GetAllCharacterData();
-
-            var characters = JsonSerializer.Deserialize<List<Character>>(charactersResult, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-
-            _characters = characters ?? throw new NullReferenceException();
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-        }
-        
     }
 }

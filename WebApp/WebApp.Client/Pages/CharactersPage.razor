@@ -1,11 +1,59 @@
 @page "/CharactersPage"
 @using WebApp.Client.Models
-@inject Services.CharacterService CharacterService
-@rendermode InteractiveWebAssembly
+@inject Services.CharacterService characterService
 
-<PageTitle>Character Page</PageTitle>
-<h1 class="display-1">CharactersPage</h1>
+<PageTitle>Characters</PageTitle>
+
+<div class="d-flex align-items-center justify-content-between mb-5 mt-2">
+    <h1 class="display-1">Characters</h1>
+    <a href="/">
+        <button type="button" class="btn btn-primary rounded-pill">
+            <h1>Leave</h1>
+        </button>
+    </a>
+</div>
+
+<hr/>
+@if (_characters != null)
+{
+    @foreach (var character in _characters)
+    {
+        <Animate Animation="Animations.FadeUp">
+            <a href="/characterDetail" class="text-decoration-none">
+                <div class="d-flex align-items-center justify-content-between m-2">
+                    <div>
+                        <h1>@character.CharacterName</h1>
+                        <h1>@character.AnimeTitel</h1>
+                    </div>
+                    <img src=@character.ImageUrl alt="Image of @character.CharacterName"
+                         class="border border-white border-5 rounded" style="height: 10rem; object-fit: cover"/>
+                </div>
+            </a>
+            <hr/>
+        </Animate>
+    }
+}
+else
+{
+    <h1>Error</h1>
+}
 
 @code {
+    private List<Character> _characters = new();
     
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (_characters.Count <= 0)
+            {
+                _characters = await characterService.GetAllCharacterData();
+                InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
 }

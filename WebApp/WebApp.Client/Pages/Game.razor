@@ -39,7 +39,7 @@
     </div>
 </Animate>
 
-@if (_displayedCharacter != null)
+@if (_currentPageStatus == PageStatus.Finished && _displayedCharacter != null)
 {
     <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
         <h1 class="d-flex justify-content-center">Character: @_displayedCharacter.CharacterName</h1>
@@ -49,12 +49,19 @@
                  class="border border-white border-5 rounded" style="height: 20rem; object-fit: cover"/>
         </div>
     </Animate>
+}else if (_currentPageStatus == PageStatus.Loading)
+{
+    <h1 class="d-flex justify-content-center">Loading...</h1>
+}else if (_currentPageStatus == PageStatus.NotFound)
+{
+    <h1 class="d-flex justify-content-center">Something went wrong :(</h1>  
 }
 
 @code 
 {
     private HubConnection? _hubConnection;
     private Character _displayedCharacter = null!;
+    private PageStatus _currentPageStatus = PageStatus.None;
 
     private bool IsConnected => _hubConnection?.State == HubConnectionState.Connected;
     
@@ -67,6 +74,11 @@
         _hubConnection.On<Character>("ReceiveCharacter", (character) =>
         {
             _displayedCharacter = character;
+            if (_displayedCharacter != null)
+            {
+                _currentPageStatus = PageStatus.Finished;
+            }
+            
             InvokeAsync(StateHasChanged);
         });
 
@@ -83,9 +95,20 @@
 
     private async Task StartGame()
     {
-        if (_hubConnection != null)
+        try
         {
-            await _hubConnection.SendAsync("StartGame");
+            if (_hubConnection != null)
+            {
+                _currentPageStatus = PageStatus.Loading;
+                await _hubConnection.SendAsync("StartGame");
+            }
         }
+        catch (Exception e)
+        {
+            _currentPageStatus = PageStatus.NotFound;
+            InvokeAsync(StateHasChanged);
+            Console.WriteLine(e);
+        }
+        
     }
 }

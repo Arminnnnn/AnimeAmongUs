@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="BlazorAnimate" Version="3.0.0" />
+        <PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
         <ProjectReference Include="..\WebApp.Client\WebApp.Client.csproj"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6"/>

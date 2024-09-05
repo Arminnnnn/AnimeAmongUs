@@ -1,0 +1,91 @@
+@page "/CharacterAdd"
+@rendermode InteractiveWebAssembly
+@using WebApp.Client.Models
+@using WebApp.Client.Services
+@inject NavigationManager Navigation
+@inject ICharacterService characterService
+
+<PageTitle>Add character</PageTitle>
+
+<Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
+    <div class="d-flex align-items-center justify-content-between mb-5 mt-2">
+        <h1 class="display-1">Add character</h1>
+        <button type="button" class="btn btn-primary rounded-pill" @onclick="@(() => Navigation.NavigateTo("/CharactersPage"))">
+            <h1>Exit</h1>
+        </button>
+    </div>
+</Animate>
+
+<div>
+    <div class="my-2">
+        <h1 class="my-2">Character name:</h1>
+        <input type="text" class="form-control rounded" @bind-value="_newCharacter.CharacterName" placeholder="exp.: Light Yagami">
+    </div>
+    <div class="my-2">
+        <h1>Anime title:</h1>
+        <input type="text" class="form-control rounded" @bind-value="_newCharacter.AnimeTitel" placeholder="exp.: Death Note">
+    </div>
+    <div class="my-2">
+        <h1>Image Url:</h1>
+        <input type="text" class="form-control rounded" @bind-value="_newCharacter.ImageUrl" placeholder="exp.: https://...">
+    </div>
+    <div class="my-2">
+        <h1>Image preview:</h1>
+        <img src=@_newCharacter.ImageUrl alt="preview"
+             class="border border-white border-5 rounded" style="height: 20rem; object-fit: cover"/>
+    </div>
+</div>
+
+<div class="d-flex align-items-center justify-content-between mt-5">
+    <button type="button" class="btn btn-primary rounded-pill" @onclick="AddCharacter">
+        <h1>Add</h1>
+    </button>
+    @if (_currentPageStatus == PageStatus.Finished)
+    {
+    <h1>Operation successful</h1>
+    }
+    else if (_currentPageStatus == PageStatus.Loading)
+    {
+    <h1>Loading...</h1>
+    }
+    else if (_currentPageStatus == PageStatus.NotFound)
+    {
+    <h1>Something went wrong while updating :(</h1>
+    }
+    
+    @if (!_everyThingFilled)
+    {
+        <h1>Every field must be filled out!</h1>
+    }
+</div>
+
+@code {
+    private PageStatus _currentPageStatus = PageStatus.None;
+    private Character _newCharacter = new();
+    private bool _everyThingFilled = true;
+    
+    private async Task AddCharacter()
+    {
+        try
+        {
+            if (_newCharacter.CharacterName != null 
+                && _newCharacter.AnimeTitel != null 
+                && _newCharacter.ImageUrl != null)
+            {
+                _everyThingFilled = true;
+                _currentPageStatus = PageStatus.Loading;
+                await characterService.PostCharacter(_newCharacter);
+                _currentPageStatus = PageStatus.Finished;
+            }
+            else
+            {
+                _everyThingFilled = false;
+            }
+        }
+        catch (Exception e)
+        {
+            _currentPageStatus = PageStatus.NotFound;
+            Console.WriteLine(e);
+        }
+    }
+}

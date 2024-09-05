@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
-using WebApp.Client.Services;
+using WebApp.Services;
 
 namespace WebApp.Hubs;
 

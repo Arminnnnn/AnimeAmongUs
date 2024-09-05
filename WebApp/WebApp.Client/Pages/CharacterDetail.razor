@@ -1,0 +1,117 @@
+@page "/CharacterDetail/{CharacterId}"
+@rendermode InteractiveWebAssembly
+@inject ICharacterService characterService
+@using WebApp.Client.Models
+@using WebApp.Client.Services
+
+<PageTitle>Character Details</PageTitle>
+
+<Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
+    <div class="d-flex align-items-center justify-content-between mb-5 mt-2">
+        <h1 class="display-1">Character Detail</h1>
+        <a href="/CharactersPage">
+            <button type="button" class="btn btn-primary rounded-pill">
+                <h1>Exit</h1>
+            </button>
+        </a>
+    </div>
+</Animate>
+
+@if (_displayedCharacter != null)
+{
+    <div>
+        <div class="my-2">
+            <h1 class="my-2">Character name:</h1>
+            <input type="text" class="form-control rounded" @bind-value="_displayedCharacter.CharacterName" placeholder="exp.: Light Yagami">
+        </div>
+        <div class="my-2">
+            <h1>Anime title:</h1>
+            <input type="text" class="form-control rounded" @bind-value="_displayedCharacter.AnimeTitel" placeholder="exp.: Death Note">
+        </div>
+        <div class="my-2">
+            <h1>Image Url:</h1>
+            <input type="text" class="form-control rounded" @bind-value="_displayedCharacter.ImageUrl" placeholder="exp.: https://...">
+        </div>
+        <div class="my-2">
+            <h1>Image preview:</h1>
+            <img src=@_displayedCharacter.ImageUrl alt="preview"
+                 class="border border-white border-5 rounded" style="height: 20rem; object-fit: cover"/>
+        </div>
+    </div>
+    
+    <div class="d-flex align-items-center justify-content-between mt-5">
+        <button type="button" class="btn btn-primary rounded-pill" @onclick="UpdateCharacter">
+            <h1>Update</h1>
+        </button>
+        <button type="button" class="btn btn-primary rounded-pill" @onclick="DeleteCharacter">
+            <h1>Delete</h1>
+        </button>
+    </div>
+    
+    @if (_currentPageStatus == PageStatus.Finished)
+    {
+        <h1>Operation successful</h1>
+    }
+    else if (_currentPageStatus == PageStatus.Loading)
+    {
+        <h1>Loading...</h1>
+    }
+    else if (_currentPageStatus == PageStatus.NotFound)
+    {
+        <h1>Something went wrong while updating :(</h1>
+    }
+}
+else
+{
+    <h1>Something went wrong while loading character data :(</h1>
+}
+
+@code {
+    [Parameter] public string CharacterId { get; set; }
+
+    private PageStatus _currentPageStatus = PageStatus.None;
+    private Character _displayedCharacter = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _displayedCharacter = await characterService.GetCharacterById(CharacterId);
+            InvokeAsync(StateHasChanged);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task UpdateCharacter()
+    {
+        try
+        {
+            _currentPageStatus = PageStatus.Loading;
+            await characterService.PutCharacter(_displayedCharacter);
+            _currentPageStatus = PageStatus.Finished;
+        }
+        catch (Exception e)
+        {
+            _currentPageStatus = PageStatus.NotFound;
+            Console.WriteLine(e);
+        }
+    }
+    
+    private async Task DeleteCharacter()
+    {
+        try
+        {
+            _currentPageStatus = PageStatus.Loading;
+            characterService.DeleteCharacter(_displayedCharacter.Id);
+            _currentPageStatus = PageStatus.Finished;
+        }
+        catch (Exception e)
+        {
+            _currentPageStatus = PageStatus.NotFound;
+            Console.WriteLine(e);
+        }
+    }
+}

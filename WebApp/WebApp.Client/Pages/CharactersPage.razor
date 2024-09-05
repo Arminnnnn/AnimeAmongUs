@@ -1,32 +1,47 @@
 @page "/CharactersPage"
+@rendermode InteractiveWebAssembly
 @using WebApp.Client.Models
-@inject Services.CharacterService characterService
+@inject Services.ICharacterService characterService
 
 <PageTitle>Characters</PageTitle>
 
-<div class="d-flex align-items-center justify-content-between mb-5 mt-2">
-    <h1 class="display-1">Characters</h1>
-    <a href="/">
-        <button type="button" class="btn btn-primary rounded-pill">
-            <h1>Leave</h1>
-        </button>
-    </a>
-</div>
+<Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
+    <div class="d-flex align-items-center justify-content-between mb-5 mt-2">
+        <h1 class="display-1">Characters</h1>
+        <div>
+            <a href="/CharacterAdd">
+                <button type="button" class="btn btn-primary rounded-pill">
+                    <h1>Add</h1>
+                </button>
+            </a>
+            <a href="/">
+                <button type="button" class="btn btn-primary rounded-pill">
+                    <h1>Exit</h1>
+                </button>
+            </a>
+        </div>
+    </div>
+</Animate>
 
-<hr/>
 @if (_characters != null)
 {
+    <Animate Animation="Animations.FadeIn">
+        <input class="form-control rounded border-0" style="width: 20rem" placeholder="Search" value="@_inputSearch" @onchange="SearchCharacter" />
+    </Animate>
+    <hr/>
+    
     @foreach (var character in _characters)
     {
-        <Animate Animation="Animations.FadeUp">
-            <a href="/characterDetail" class="text-decoration-none">
+        <Animate Animation="Animations.FadeUp" Duration="TimeSpan.FromSeconds(1)">
+            <a href="/characterDetail/@character.Id" class="text-decoration-none">
                 <div class="d-flex align-items-center justify-content-between m-2">
                     <div>
                         <h1>@character.CharacterName</h1>
                         <h1>@character.AnimeTitel</h1>
                     </div>
                     <img src=@character.ImageUrl alt="Image of @character.CharacterName"
-                         class="border border-white border-5 rounded" style="height: 10rem; object-fit: cover"/>
+                         class="border border-white border-5 rounded" 
+                         style="height: 10rem; object-fit: cover"/>
                 </div>
             </a>
             <hr/>
@@ -40,20 +55,36 @@ else
 
 @code {
     private List<Character> _characters = new();
+    private List<Character> _charactersAll = new();
+    private string _inputSearch;
     
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            if (_characters.Count <= 0)
+            if (_charactersAll.Count <= 0)
             {
-                _characters = await characterService.GetAllCharacterData();
+                _charactersAll = await characterService.GetCharacters();
+                _characters = _charactersAll.Where(c=> c.Id != "66d753b5ca3c5a2735579554")
+                    .OrderBy(c => c.CharacterName).ToList();
                 InvokeAsync(StateHasChanged);
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+        }
+    }
+
+    private void SearchCharacter(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        _characters = _charactersAll.Where(c=> c.Id != "66d753b5ca3c5a2735579554")
+            .OrderBy(c => c.CharacterName).ToList();
+        _inputSearch = e.Value.ToString();
+
+        if(!string.IsNullOrEmpty(_inputSearch))
+        {
+            _characters = _characters.Where(c => c.CharacterName.ToUpper().Contains(_inputSearch.ToUpper())).ToList();
         }
     }
 }

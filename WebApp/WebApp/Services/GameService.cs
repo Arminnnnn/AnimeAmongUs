@@ -1,7 +1,6 @@
-using System.Text.Json;
 using WebApp.Client.Models;
 
-namespace WebApp.Client.Services;
+namespace WebApp.Services;
 
 public class GameService
 {
@@ -50,7 +49,7 @@ public class GameService
     {
         if (_characters.Count == 0)
         { 
-            _characters = await _characterService.GetAllCharacterData();
+            _characters = await _characterService.GetCharacters();
         }
 
         var imposter = _characters.FirstOrDefault(c => c.Id == _imposterCharacterId);
@@ -63,7 +62,7 @@ public class GameService
         
         if (_characters.Count == 0)
         {
-            _characters = await _characterService.GetAllCharacterData();
+            _characters = await _characterService.GetCharacters();
         }
         
         var innocentCharacter = _characters.Where(c => c.Id != _imposterCharacterId).ToList();

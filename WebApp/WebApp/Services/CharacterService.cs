@@ -6,7 +6,7 @@ namespace WebApp.Services;
 
 public class CharacterService : ICharacterService
 {
-    private readonly string _baseUrl = "http://localhost:5185";
+    private readonly string _baseUrl = "https://animeamongus.onrender.com";
     
     public async Task<Character> GetCharacterById(string id)
     {

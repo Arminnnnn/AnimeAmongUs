@@ -23,7 +23,7 @@
     </div>
 </Animate>
 
-@if (_characters != null)
+@if (_currentPageStatus == PageStatus.Finished && _characters != null)
 {
     <Animate Animation="Animations.FadeIn">
         <input class="form-control rounded border-0" style="width: 20rem" placeholder="Search" value="@_inputSearch" @onchange="SearchCharacter" />
@@ -48,15 +48,20 @@
         </Animate>
     }
 }
-else
+else if (_currentPageStatus == PageStatus.Loading)
 {
-    <h1>Error</h1>
+    <h1 class="d-flex justify-content-center">Loading...</h1>
+}
+else if(_currentPageStatus == PageStatus.NotFound)
+{
+    <h1 class="d-flex justify-content-center">Something went wrong :(</h1>
 }
 
 @code {
     private List<Character> _characters = new();
     private List<Character> _charactersAll = new();
     private string _inputSearch;
+    private PageStatus _currentPageStatus = PageStatus.None;
     
     protected override async Task OnInitializedAsync()
     {
@@ -64,14 +69,17 @@ else
         {
             if (_charactersAll.Count <= 0)
             {
+                _currentPageStatus = PageStatus.Loading;
                 _charactersAll = await characterService.GetCharacters();
                 _characters = _charactersAll.Where(c=> c.Id != "66d753b5ca3c5a2735579554")
                     .OrderBy(c => c.CharacterName).ToList();
+                _currentPageStatus = PageStatus.Finished;
                 InvokeAsync(StateHasChanged);
             }
         }
         catch (Exception e)
         {
+            _currentPageStatus = PageStatus.NotFound;
             Console.WriteLine(e);
         }
     }

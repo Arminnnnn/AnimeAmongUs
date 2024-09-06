@@ -1,5 +1,5 @@
 html, body {
-    background-color: #fc74ea;
+    background-color: #451093;
 }
 
 @font-face {
@@ -11,6 +11,10 @@ h1, h2, h3, h4, h5, h6, p {
     color: white;
     font-family: 'AnimeFont';
     margin: 0px 0px 0px 0px;
+}
+
+hr{
+    color: white;
 }
 
 footer {

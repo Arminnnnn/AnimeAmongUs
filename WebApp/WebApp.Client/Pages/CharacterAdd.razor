@@ -10,7 +10,7 @@
 <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
     <div class="d-flex align-items-center justify-content-between mb-5 mt-2">
         <h1 class="display-1">Add character</h1>
-        <button type="button" class="btn btn-primary rounded-pill" @onclick="@(() => Navigation.NavigateTo("/CharactersPage"))">
+        <button type="button" class="btn btn-warning rounded-pill" @onclick="@(() => Navigation.NavigateTo("/CharactersPage"))">
             <h1>Exit</h1>
         </button>
     </div>
@@ -37,7 +37,7 @@
 </div>
 
 <div class="d-flex align-items-center justify-content-between mt-5">
-    <button type="button" class="btn btn-primary rounded-pill" @onclick="AddCharacter">
+    <button type="button" class="btn btn-warning rounded-pill" @onclick="AddCharacter">
         <h1>Add</h1>
     </button>
     @if (_currentPageStatus == PageStatus.Finished)

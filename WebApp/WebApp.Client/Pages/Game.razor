@@ -11,7 +11,7 @@
 <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
     <div class="d-flex align-items-center justify-content-between mb-5 mt-2">
         <h1 class="display-1">Game</h1>
-        <button type="button" class="btn btn-primary rounded-pill" @onclick="@(() => Navigation.NavigateTo("/"))">
+        <button type="button" class="btn btn-warning rounded-pill" @onclick="@(() => Navigation.NavigateTo("/"))">
             <h1>Leave</h1>
         </button>
     </div>
@@ -33,7 +33,7 @@
     </div>
 
     <div class="d-flex justify-content-center my-5">
-        <button type="button" class="btn btn-primary rounded-pill" disabled="@(!IsConnected)" @onclick="StartGame">
+        <button type="button" class="btn btn-warning rounded-pill" disabled="@(!IsConnected)" @onclick="StartGame">
             <h1>Start Game</h1>
         </button>
     </div>

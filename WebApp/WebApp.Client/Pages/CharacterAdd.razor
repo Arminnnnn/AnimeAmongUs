@@ -1,5 +1,5 @@
 @page "/CharacterAdd"
-@rendermode InteractiveWebAssembly
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 @using WebApp.Client.Models
 @using WebApp.Client.Services
 @inject NavigationManager Navigation
@@ -17,19 +17,19 @@
 </Animate>
 
 <div>
-    <div class="my-2">
+    <div class="my-3 input-group-lg">
         <h1 class="my-2">Character name:</h1>
-        <input type="text" class="form-control rounded" @bind-value="_newCharacter.CharacterName" placeholder="exp.: Light Yagami">
+        <input type="text" class="form-control rounded-pill fw-bold" @bind-value="_newCharacter.CharacterName" placeholder="exp.: Light Yagami">
     </div>
-    <div class="my-2">
+    <div class="my-3 input-group-lg">
         <h1>Anime title:</h1>
-        <input type="text" class="form-control rounded" @bind-value="_newCharacter.AnimeTitel" placeholder="exp.: Death Note">
+        <input type="text" class="form-control rounded-pill fw-bold" @bind-value="_newCharacter.AnimeTitel" placeholder="exp.: Death Note">
     </div>
-    <div class="my-2">
+    <div class="my-3 input-group-lg">
         <h1>Image Url:</h1>
-        <input type="text" class="form-control rounded" @bind-value="_newCharacter.ImageUrl" placeholder="exp.: https://...">
+        <input type="text" class="form-control rounded-pill fw-bold" @bind-value="_newCharacter.ImageUrl" placeholder="exp.: https://...">
     </div>
-    <div class="my-2">
+    <div class="my-3 input-group-lg">
         <h1>Image preview:</h1>
         <img src=@_newCharacter.ImageUrl alt="preview"
              class="border border-white border-5 rounded" style="height: 20rem; object-fit: cover"/>

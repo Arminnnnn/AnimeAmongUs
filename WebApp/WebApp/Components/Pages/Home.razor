@@ -3,26 +3,43 @@
 <PageTitle>AnimeAmongUs</PageTitle>
 
 <Animate Animation="Animations.SlideLeft" Duration="TimeSpan.FromSeconds(1)">
-    <div class="d-flex justify-content-end mb-5">
+    <div class="d-flex justify-content-end">
         <a href="/CharactersPage">
-            <button type="button" class="btn btn-warning rounded-pill mt-4 mb-5 ">
+            <button type="button" class="btn btn-warning rounded-pill mt-4">
                 <h1>Edit</h1></button>
         </a>
     </div>
 </Animate>
 
 <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
-    <div class="d-flex align-items-center justify-content-between m-5">
-        <img src="images/among-us-naruto.png" alt="among us naruto skin"/>
-        <h1 class="display-1 m-5">Anime Among Us</h1>
-        <img src="images/among-us-naruto.png" alt="among us naruto skin"/>
+    <div class="d-flex align-items-center justify-content-between">
+        <img src=@_amongUsImgUrl1 alt="random among us" class="flip" style="height: 20rem; object-fit: cover"/>
+        <img src="images/AnimeAmongUsTitel.svg" alt="title" width="700"/>
+        <img src=@_amongUsImgUrl2 alt="random among us" style="height: 20rem; object-fit: cover"/>
     </div>
 </Animate>
 
 <Animate Animation="Animations.SlideUp" Duration="TimeSpan.FromSeconds(1)">
-<div class="d-flex justify-content-center m-5">
+    <div class="d-flex justify-content-center">
         <a href="/Game">
             <button type="button" class="btn btn-warning m-5 rounded-pill"><h1>Join</h1></button>
         </a>
     </div>
 </Animate>
+
+@code
+{
+    private string _amongUsImgUrl1;
+    private string _amongUsImgUrl2;
+
+    protected override Task OnInitializedAsync()
+    {
+        Random rnd = new();
+        var randomNumber1 = rnd.Next(1, 14);
+        var randomNumber2 = rnd.Next(1, 14);
+
+        _amongUsImgUrl1 = $"images/amongus_{randomNumber1}.png";
+        _amongUsImgUrl2 = $"images/amongus_{randomNumber2}.png";
+        return base.OnInitializedAsync();
+    }
+}

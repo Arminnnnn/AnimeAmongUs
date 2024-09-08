@@ -1,5 +1,5 @@
 @page "/CharactersPage"
-@rendermode InteractiveWebAssembly
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 @using WebApp.Client.Models
 @inject Services.ICharacterService characterService
 
@@ -26,7 +26,9 @@
 @if (_currentPageStatus == PageStatus.Finished && _characters != null)
 {
     <Animate Animation="Animations.FadeIn">
-        <input class="form-control rounded border-0" style="width: 20rem" placeholder="Search" value="@_inputSearch" @onchange="SearchCharacter" />
+        <div class="input-group-lg">
+            <input class="form-control rounded-pill fw-bold border-0" style="width: 20rem" placeholder="Search" value="@_inputSearch" @onchange="SearchCharacter"/>
+        </div>
     </Animate>
     <hr/>
     

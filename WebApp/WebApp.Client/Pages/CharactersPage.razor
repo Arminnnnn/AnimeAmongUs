@@ -10,7 +10,7 @@
         <h1 class="display-1">Characters</h1>
         <div>
             <a href="/CharacterAdd">
-                <button type="button" class="btn btn-warning rounded-pill">
+                <button type="button" class="btn btn-warning rounded-pill me-2">
                     <h1>Add</h1>
                 </button>
             </a>
@@ -76,7 +76,7 @@ else if(_currentPageStatus == PageStatus.NotFound)
                 _characters = _charactersAll.Where(c=> c.Id != "66d753b5ca3c5a2735579554")
                     .OrderBy(c => c.CharacterName).ToList();
                 _currentPageStatus = PageStatus.Finished;
-                InvokeAsync(StateHasChanged);
+                await InvokeAsync(StateHasChanged);
             }
         }
         catch (Exception e)

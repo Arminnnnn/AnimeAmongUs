@@ -5,6 +5,13 @@ namespace WebApp.Hubs;
 
 public class GameHub : Hub
 {
+    private readonly GameService _gameService;
+
+    public GameHub(GameService gameService)
+    {
+        _gameService = gameService;
+    }
+
     private static List<string> _connectedPlayers = new();
 
     public override Task OnConnectedAsync()
@@ -21,8 +28,8 @@ public class GameHub : Hub
     
     public async Task StartGame()
     {
-        this.EmtpyGroups();
-        GameService _gameService = new(_connectedPlayers);
+        await EmtpyGroups();
+        _gameService.SetConnectedPlayers(_connectedPlayers);
         
         var imposters = _gameService.GetImposters();
         

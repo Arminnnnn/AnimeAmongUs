@@ -1,25 +1,31 @@
 using WebApp.Client.Models;
+using WebApp.Client.Services;
 
 namespace WebApp.Services;
 
 public class GameService
 {
-    private CharacterService _characterService = new();
-    private List<Character> _characters = new();
+    private readonly ICharacterService _characterService;
     
+    private List<Character> _characters = new();
     private static List<string> _connectedPlayers = new();
     private List<string> _imposters = new();
-    private string _imposterCharacterId = "66d753b5ca3c5a2735579554";
+    private const string ImposterCharacterId = "66d753b5ca3c5a2735579554";
 
-    public GameService(List<string> connectedPlayers)
+    public GameService(ICharacterService characterService)
+    {
+        _characterService = characterService;
+    }
+    
+    public void SetConnectedPlayers(List<string> connectedPlayers)
     {
         _connectedPlayers = connectedPlayers;
     }
-
+    
     public List<string> GetImposters()
     {
         Random rnd = new();
-        int imposterAmount = this.CalculateAmountOfImposters(_connectedPlayers.Count());
+        int imposterAmount = CalculateAmountOfImposters(_connectedPlayers.Count());
 
         for (int i = 0; i < imposterAmount; i++)
         {
@@ -28,31 +34,30 @@ public class GameService
         
         return _imposters;
     }
-    
-    public int CalculateAmountOfImposters(int playerAmount)
+
+    private int CalculateAmountOfImposters(int playerAmount)
     {
         if (playerAmount <= 5)
         {
             return 1;
         }
-        else if (playerAmount <= 9)
+
+        if (playerAmount <= 9)
         {
             return 2;
         }
-        else
-        {
-            return 3;
-        }
+
+        return 3;
     }
 
-    public async Task<Character> GetImposterCharacter()
+    public async Task<Character?> GetImposterCharacter()
     {
         if (_characters.Count == 0)
         { 
-            _characters = await _characterService.GetCharacters();
+            _characters = await _characterService.GetCharacters() ?? throw new InvalidOperationException();
         }
 
-        var imposter = _characters.FirstOrDefault(c => c.Id == _imposterCharacterId);
+        var imposter = _characters.Find(c => c.Id == ImposterCharacterId);
         return imposter;
     }
     
@@ -62,10 +67,10 @@ public class GameService
         
         if (_characters.Count == 0)
         {
-            _characters = await _characterService.GetCharacters();
+            _characters = await _characterService.GetCharacters() ?? throw new InvalidOperationException();
         }
         
-        var innocentCharacter = _characters.Where(c => c.Id != _imposterCharacterId).ToList();
+        var innocentCharacter = _characters.Where(c => c.Id != ImposterCharacterId).ToList();
         return innocentCharacter[rnd.Next(_characters.Count-1)];
     }
 }

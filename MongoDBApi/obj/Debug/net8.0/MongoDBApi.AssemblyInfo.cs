@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("62acbfb4-9068-4112-937d-7137501a3a5d")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("MongoDBApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d540de84e2b113e019210643c772fd49bb65bd4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b01b1595cf13bc3e5b91ee012295313880a17681")]
 [assembly: System.Reflection.AssemblyProductAttribute("MongoDBApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MongoDBApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

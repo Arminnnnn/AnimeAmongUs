@@ -1,4 +1,3 @@
-using System.Text.Json;
 using WebApp.Client.Models;
 using WebApp.Client.Services;
 
@@ -6,22 +5,19 @@ namespace WebApp.Services;
 
 public class CharacterService : ICharacterService
 {
-    private readonly string _baseUrl = "https://animeamongus.onrender.com";
+    private readonly IHttpClientFactory _httpClientFactory;
     
+    public CharacterService(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
+
     public async Task<Character> GetCharacterById(string id)
     {
         try
         {
-            HttpClient client = new();
-            
-            string dataResult = await GetCharacterByIdStringAsync(client, id);
-            
-            var character = JsonSerializer.Deserialize<Character>(dataResult, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-            
-            return character ?? throw new NullReferenceException();
+            var client = _httpClientFactory.CreateClient("characterApi");
+            return await client.GetFromJsonAsync<Character>($"/api/Character/{id}");
         }
         catch (Exception exception)
         {
@@ -35,16 +31,8 @@ public class CharacterService : ICharacterService
     {
         try
         {
-            HttpClient client = new();
-            
-            string dataResult = await GetCharactersStringAsync(client);
-            
-            var characters = JsonSerializer.Deserialize<List<Character>>(dataResult, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-            
-            return characters ?? throw new NullReferenceException();
+            var client = _httpClientFactory.CreateClient("characterApi");
+            return await client.GetFromJsonAsync<List<Character>>($"/api/Character");
         }
         catch (Exception exception)
         {
@@ -58,10 +46,8 @@ public class CharacterService : ICharacterService
     {
         try
         {
-            HttpClient client = new();
-            string requestUrl = $"{_baseUrl}/api/Character";
-
-            await client.PostAsJsonAsync(requestUrl, character);
+            var client = _httpClientFactory.CreateClient("characterApi");
+            await client.PutAsJsonAsync("/api/Character", character);
         }
         catch (Exception exception)
         {
@@ -73,10 +59,8 @@ public class CharacterService : ICharacterService
     {
         try
         {
-            HttpClient client = new();
-            string requestUrl = $"{_baseUrl}/api/Character/{character.Id}";
-
-            await client.PutAsJsonAsync(requestUrl, character);
+            var client = _httpClientFactory.CreateClient("characterApi");
+            await client.PutAsJsonAsync($"/api/Character/{character.Id}", character);
         }
         catch (Exception exception)
         {
@@ -88,46 +72,12 @@ public class CharacterService : ICharacterService
     {
         try
         {
-            HttpClient client = new();
-            string requestUrl = $"{_baseUrl}/api/Character/{id}";
-
-            await client.DeleteAsync(requestUrl);
+            var client = _httpClientFactory.CreateClient("characterApi");
+            await client.DeleteAsync($"/api/Character/{id}");
         }
         catch (Exception exception)
         {
             Console.WriteLine(exception);
         }
-    }
-
-    private async Task<string> GetCharacterByIdStringAsync(HttpClient client, string id)
-    {
-        string requestUrl = $"{_baseUrl}/api/Character/{id}";
-        
-        var response = await client.GetAsync(requestUrl);
-        
-        if (response.IsSuccessStatusCode)
-        {
-            string content = await response.Content.ReadAsStringAsync();
-            return content;
-        }
-        
-        Console.WriteLine($"Error Get: {response.StatusCode}");
-        return null;
-    }
-    
-    private async Task<string?> GetCharactersStringAsync(HttpClient client)
-    {
-        string requestUrl = $"{_baseUrl}/api/Character";
-
-        var response = await client.GetAsync(requestUrl);
-
-        if (response.IsSuccessStatusCode)
-        {
-            string content = await response.Content.ReadAsStringAsync();
-            return content;
-        }
-        
-        Console.WriteLine($"Error Get: {response.StatusCode}");
-        return null;
     }
 }

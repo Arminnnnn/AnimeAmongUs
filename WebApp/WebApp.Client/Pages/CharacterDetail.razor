@@ -77,7 +77,7 @@ else
         try
         {
             _displayedCharacter = await characterService.GetCharacterById(CharacterId);
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(StateHasChanged);
         }
         catch (Exception e)
         {

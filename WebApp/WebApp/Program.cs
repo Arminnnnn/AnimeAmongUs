@@ -6,16 +6,28 @@ using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+var characterApiBaseUrl = builder.Configuration["MongoDBApi:BaseUrl"];
+var characterApiKey = builder.Configuration["MongoDBApi:ApiKey"];
+
 builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<ICharacterService, CharacterService>();
+builder.Services.AddTransient<GameService>();
+
+builder.Services.AddHttpClient("characterApi", client =>
+{
+    client.BaseAddress = new Uri(characterApiBaseUrl);
+    client.DefaultRequestHeaders.Add("x-api-key", characterApiKey);
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
@@ -23,7 +35,6 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -54,7 +65,7 @@ app.MapPost("/api/CharacterService", async (Character newCharacter, ICharacterSe
     await service.PostCharacter(newCharacter);
 });
 
-app.MapPut("/api/CharacterService/{id}", async (Character character, ICharacterService service) =>
+app.MapPut("/api/CharacterService/{id}", async (Character? character, ICharacterService service) =>
 {
     await service.PutCharacter(character);
 });

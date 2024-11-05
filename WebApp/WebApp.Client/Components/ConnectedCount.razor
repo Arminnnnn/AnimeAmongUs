@@ -7,6 +7,17 @@
 @if (IsConnected)
 {
     <h1>Player count: @_playerCount</h1>
+    <div class="mt-5 me-5 d-flex flex-column align-items-center">
+        <h4 class="text-white">Buzzer:</h4>
+        @if (!_buttonState)
+        {
+            <img src="icons/buzzer-button-green.svg" width="120" alt="buzzer not pressed" @onclick="ButtonClicked"/>
+        }
+        else
+        {
+            <img src="icons/buzzer-button-red.svg" width="120" alt="buzzer pressed" @onclick="ButtonUndo"/>
+        }
+    </div>
 }
 else
 {
@@ -16,6 +27,7 @@ else
 @code {
     private HubConnection? _hubConnection;
     private int _playerCount;
+    private bool _buttonState;
     
     private bool IsConnected => _hubConnection?.State == HubConnectionState.Connected;
     
@@ -25,9 +37,10 @@ else
             .WithUrl(Navigation.ToAbsoluteUri("/connectedHub"))
             .Build();
 
-        _hubConnection.On<int>("OnConnected", (playerCount) =>
+        _hubConnection.On<int, bool>("OnConnected", (playerCount, buttonState) =>
         {
             _playerCount = playerCount;
+            _buttonState = buttonState;
             InvokeAsync(StateHasChanged);
         });
 
@@ -39,6 +52,38 @@ else
         if (_hubConnection != null)
         {
             await _hubConnection.DisposeAsync();
+        }
+    }
+
+    private async Task ButtonClicked()
+    {
+        try
+        {
+            if (_hubConnection != null)
+            {
+                await _hubConnection.SendAsync("ButtonClicked");
+            }
+        }
+        catch (Exception e)
+        {
+            await InvokeAsync(StateHasChanged);
+            Console.WriteLine(e);
+        }
+    }
+
+    private async Task ButtonUndo()
+    {
+        try
+        {
+            if (_hubConnection != null)
+            {
+                await _hubConnection.SendAsync("ButtonUndo");
+            }
+        }
+        catch (Exception e)
+        {
+            await InvokeAsync(StateHasChanged);
+            Console.WriteLine(e);
         }
     }
 }

@@ -4,33 +4,48 @@
 
 <Animate Animation="Animations.SlideLeft" Duration="TimeSpan.FromSeconds(1)">
     <div class="d-flex justify-content-end">
+    
         <a href="/CharactersPage">
             <button type="button" class="btn btn-warning rounded-pill mt-4">
-                <h1>Edit</h1></button>
+                <h1>Edit</h1>
+            </button>
         </a>
     </div>
 </Animate>
 
 <Animate Animation="Animations.FadeIn" Duration="TimeSpan.FromSeconds(1)">
-    <div class="d-flex align-items-center justify-content-between">
-        <img src=@_amongUsImgUrl1 alt="random among us" class="flip" style="width: 18rem"/>
+    <div class="d-flex align-items-center justify-content-around">
+        <img src=@_amongUsImgUrl1 alt="random among us" class="flip" 
+             width="300"/>
         <img src="images/AnimeAmongUsTitel.svg" alt="title" width="700"/>
-        <img src=@_amongUsImgUrl2 alt="random among us" style="width: 18rem"/>
+        <img src=@_amongUsImgUrl2 alt="random among us" 
+             width="300"/>
     </div>
 </Animate>
 
 <Animate Animation="Animations.SlideUp" Duration="TimeSpan.FromSeconds(1)">
     <div class="d-flex justify-content-center">
         <a href="/Game">
-            <button type="button" class="btn btn-warning m-5 rounded-pill"><h1>Join</h1></button>
+            <button type="button" class="btn btn-warning rounded-pill">
+                <h1 class="display-4 mx-2">Join</h1>
+            </button>
         </a>
     </div>
 </Animate>
 
+<Animate Animation="Animations.SlideUp" Duration="TimeSpan.FromSeconds(1)">
+    <div class="d-flex justify-content-center">
+        <a href="/HowToPlay">
+            <button type="button" class="btn btn-warning mt-4 rounded-pill">
+                <h2>How to play</h2>
+            </button>
+        </a>
+    </div>
+</Animate>
 @code
 {
-    private string _amongUsImgUrl1;
-    private string _amongUsImgUrl2;
+    private string? _amongUsImgUrl1;
+    private string? _amongUsImgUrl2;
 
     protected override Task OnInitializedAsync()
     {
